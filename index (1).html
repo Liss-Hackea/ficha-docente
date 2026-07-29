@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha Docente | Hackea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul-oscuro: #0A1F44;
+    --azul-hackea: #1A6BCC;
+    --blanco: #FFFFFF;
+    --gris-claro: #F4F6F9;
+    --gris-medio: #6B7280;
+    --gris-oscuro: #374151;
+    --celeste: #DBEAFE;
+    --borde: #E5E7EB;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', Helvetica, Arial, sans-serif;
+    background: var(--gris-claro);
+    color: var(--gris-oscuro);
+    padding: 24px 16px;
+  }
+
+  .contenedor {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .encabezado {
+    background: var(--azul-oscuro);
+    border-radius: 12px;
+    padding: 32px 28px;
+    margin-bottom: 24px;
+  }
+
+  .logo-texto {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 0 0 16px 0;
+  }
+  .logo-texto span:first-child { color: #FFFFFF; }
+  .logo-texto span:last-child { color: #6FA8FF; }
+
+  .encabezado h1 {
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+  }
+
+  .encabezado p {
+    color: var(--celeste);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .card {
+    background: var(--blanco);
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 1px 3px rgba(10, 31, 68, 0.08);
+  }
+
+  .campo {
+    margin-bottom: 22px;
+  }
+
+  .campo label {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--azul-oscuro);
+    margin-bottom: 4px;
+  }
+
+  .campo .ayuda {
+    font-size: 12px;
+    color: var(--gris-medio);
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1.5px solid var(--borde);
+    border-radius: 8px;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 14px;
+    color: var(--gris-oscuro);
+    background: var(--blanco);
+    transition: border-color 0.15s ease;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--azul-hackea);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231A6BCC' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 18px;
+    padding-right: 36px;
+  }
+
+  #otraAsignaturaWrap {
+    display: none;
+    margin-top: 10px;
+  }
+
+  .zona-foto {
+    border: 1.5px dashed var(--azul-hackea);
+    border-radius: 8px;
+    background: var(--gris-claro);
+    padding: 20px;
+    text-align: center;
+  }
+
+  .zona-foto input[type="file"] {
+    display: none;
+  }
+
+  .btn-foto {
+    display: inline-block;
+    border: 2px solid var(--azul-oscuro);
+    color: var(--azul-oscuro);
+    background: var(--blanco);
+    padding: 9px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .preview-foto {
+    display: none;
+    max-width: 140px;
+    max-height: 140px;
+    border-radius: 8px;
+    margin: 14px auto 0 auto;
+    border: 1.5px solid var(--borde);
+  }
+
+  .nombre-archivo {
+    font-size: 12px;
+    color: var(--gris-medio);
+    margin-top: 8px;
+  }
+
+  .btn-enviar {
+    width: 100%;
+    background: var(--azul-hackea);
+    color: #FFFFFF;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  .btn-enviar:disabled {
+    background: var(--gris-medio);
+    cursor: not-allowed;
+  }
+
+  .mensaje {
+    display: none;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+
+  .mensaje.exito {
+    background: var(--celeste);
+    color: var(--azul-oscuro);
+  }
+
+  .mensaje.error {
+    background: #FEE2E2;
+    color: #991B1B;
+  }
+
+  .contacto {
+    text-align: center;
+    font-size: 12px;
+    color: var(--gris-medio);
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="contenedor">
+
+  <div class="encabezado">
+    <p class="logo-texto"><span>HACK</span><span>EA</span></p>
+    <h1>Ficha Docente</h1>
+    <p>Estos datos se usan para completar tu ficha docente, la cual se publica en Blackboard. Por favor complétalos con atención antes de enviarlos.</p>
+  </div>
+
+  <div class="card">
+    <form id="formFicha">
+
+      <div class="campo">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" name="nombre" required>
+      </div>
+
+      <div class="campo">
+        <label for="asignatura">Asignatura</label>
+        <select id="asignatura" name="asignatura" required>
+          <option value="" disabled selected>Selecciona tu asignatura</option>
+          <option value="Contabilidad gerencial">Contabilidad gerencial</option>
+          <option value="Contabilidad para la toma de decisiones">Contabilidad para la toma de decisiones</option>
+          <option value="Control estratégico">Control estratégico</option>
+          <option value="Control y riesgo operacional">Control y riesgo operacional</option>
+          <option value="Datos, Visualización y Decisiones para el impacto social">Datos, Visualización y Decisiones para el impacto social</option>
+          <option value="Diseño, desarrollo y gestión curricular">Diseño, desarrollo y gestión curricular</option>
+          <option value="Diversidad, inclusión y equidad educativa">Diversidad, inclusión y equidad educativa</option>
+          <option value="Dirección de la innovación">Dirección de la innovación</option>
+          <option value="Economía gerencial">Economía gerencial</option>
+          <option value="Empresa y sustentabilidad">Empresa y sustentabilidad</option>
+          <option value="Evaluación para el aprendizaje">Evaluación para el aprendizaje</option>
+          <option value="Finanzas para la toma de decisiones">Finanzas para la toma de decisiones</option>
+          <option value="Gestión de talento humano">Gestión de talento humano</option>
+          <option value="Gestión y desarrollo organizacional">Gestión y desarrollo organizacional</option>
+          <option value="Inteligencia Artificial Creatividad y Ética para la Sociedad Contemporánea">Inteligencia Artificial Creatividad y Ética para la Sociedad Contemporánea</option>
+          <option value="Introducción al Diseño de servicios">Introducción al Diseño de servicios</option>
+          <option value="Investigación educativa y gestión de proyecto">Investigación educativa y gestión de proyecto</option>
+          <option value="Marketing y comportamiento del consumidor">Marketing y comportamiento del consumidor</option>
+          <option value="Planeación presupuestaria">Planeación presupuestaria</option>
+          <option value="Planificación de marketing estratégico">Planificación de marketing estratégico</option>
+          <option value="Planificación estratégica">Planificación estratégica</option>
+          <option value="Taller de emprendimiento">Taller de emprendimiento</option>
+          <option value="Taller de estrategias para la diversificación de la enseñanza y la evaluación">Taller de estrategias para la diversificación de la enseñanza y la evaluación</option>
+          <option value="Taller de evaluación formativa y retroalimentación">Taller de evaluación formativa y retroalimentación</option>
+          <option value="Tecnología para el control de gestión">Tecnología para el control de gestión</option>
+          <option value="Teorías y enfoques prácticos del currículum">Teorías y enfoques prácticos del currículum</option>
+          <option value="Trabajo colaborativo interprofesional">Trabajo colaborativo interprofesional</option>
+          <option value="Transformación Digital e Inteligencia de Negocios">Transformación Digital e Inteligencia de Negocios</option>
+          <option value="__otra__">Otra (especificar)</option>
+        </select>
+        <div id="otraAsignaturaWrap">
+          <input type="text" id="otraAsignatura" name="otraAsignatura" placeholder="Escribe el nombre de la asignatura">
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="perfil">Perfil profesional</label>
+        <p class="ayuda">Una breve descripción de tu trayectoria y área de especialización.</p>
+        <textarea id="perfil" name="perfil" required></textarea>
+      </div>
+
+      <div class="campo">
+        <label for="experiencia">Experiencia en el área</label>
+        <p class="ayuda">Proyectos, cargos o actividades relevantes vinculadas a la asignatura.</p>
+        <textarea id="experiencia" name="experiencia" required></textarea>
+      </div>
+
+      <div class="campo">
+        <label for="correo">Correo de contacto para los estudiantes</label>
+        <p class="ayuda">El correo que usarán los estudiantes para comunicarse contigo durante el curso.</p>
+        <input type="email" id="correo" name="correo" required>
+      </div>
+
+      <div class="campo">
+        <label for="foto">Foto</label>
+        <p class="ayuda">Una fotografía profesional para incluir en la ficha docente (buena resolución, apta para Blackboard).</p>
+        <div class="zona-foto">
+          <label class="btn-foto" for="foto">Seleccionar foto</label>
+          <input type="file" id="foto" name="foto" accept="image/*" required>
+          <div class="nombre-archivo" id="nombreArchivo">Ningún archivo seleccionado</div>
+          <img id="previewFoto" class="preview-foto" alt="Previsualización">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-enviar" id="btnEnviar">Enviar ficha docente</button>
+
+      <div class="mensaje exito" id="mensajeExito">
+        ✓ Tu ficha docente fue enviada correctamente. ¡Gracias!
+      </div>
+      <div class="mensaje error" id="mensajeError"></div>
+
+    </form>
+  </div>
+
+  <p class="contacto">Si tienes alguna consulta o comentario, no dudes en escribirnos.</p>
+
+</div>
+
+<script>
+  // IMPORTANTE: reemplaza esta URL por la de tu Web App de Apps Script (termina en /exec)
+  const WEB_APP_URL = 'PEGA_AQUI_TU_URL_DE_APPS_SCRIPT';
+
+  const form = document.getElementById('formFicha');
+  const selectAsignatura = document.getElementById('asignatura');
+  const otraWrap = document.getElementById('otraAsignaturaWrap');
+  const otraInput = document.getElementById('otraAsignatura');
+  const inputFoto = document.getElementById('foto');
+  const nombreArchivo = document.getElementById('nombreArchivo');
+  const previewFoto = document.getElementById('previewFoto');
+  const btnEnviar = document.getElementById('btnEnviar');
+  const mensajeExito = document.getElementById('mensajeExito');
+  const mensajeError = document.getElementById('mensajeError');
+
+  // Mostrar/ocultar campo "otra asignatura"
+  selectAsignatura.addEventListener('change', () => {
+    if (selectAsignatura.value === '__otra__') {
+      otraWrap.style.display = 'block';
+      otraInput.required = true;
+    } else {
+      otraWrap.style.display = 'none';
+      otraInput.required = false;
+    }
+  });
+
+  // Preview de la foto seleccionada
+  inputFoto.addEventListener('change', () => {
+    const archivo = inputFoto.files[0];
+    if (archivo) {
+      nombreArchivo.textContent = archivo.name;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewFoto.src = e.target.result;
+        previewFoto.style.display = 'block';
+      };
+      reader.readAsDataURL(archivo);
+    } else {
+      nombreArchivo.textContent = 'Ningún archivo seleccionado';
+      previewFoto.style.display = 'none';
+    }
+  });
+
+  // Convertir archivo a base64
+  function archivoABase64(archivo) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(archivo);
+    });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    mensajeExito.style.display = 'none';
+    mensajeError.style.display = 'none';
+
+    if (WEB_APP_URL === 'PEGA_AQUI_TU_URL_DE_APPS_SCRIPT') {
+      mensajeError.textContent = 'Falta configurar la URL del Web App en el código (WEB_APP_URL).';
+      mensajeError.style.display = 'block';
+      return;
+    }
+
+    const asignaturaFinal = selectAsignatura.value === '__otra__'
+      ? otraInput.value.trim()
+      : selectAsignatura.value;
+
+    const archivo = inputFoto.files[0];
+    if (!archivo) {
+      mensajeError.textContent = 'Por favor selecciona una foto.';
+      mensajeError.style.display = 'block';
+      return;
+    }
+
+    btnEnviar.disabled = true;
+    btnEnviar.textContent = 'Enviando...';
+
+    try {
+      const fotoBase64 = await archivoABase64(archivo);
+
+      const payload = {
+        nombre: document.getElementById('nombre').value.trim(),
+        asignatura: asignaturaFinal,
+        perfil: document.getElementById('perfil').value.trim(),
+        experiencia: document.getElementById('experiencia').value.trim(),
+        correo: document.getElementById('correo').value.trim(),
+        photoBase64: fotoBase64,
+        photoName: archivo.name,
+        photoMimeType: archivo.type
+      };
+
+      const respuesta = await fetch(WEB_APP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+
+      const resultado = await respuesta.json();
+
+      if (resultado.success) {
+        form.reset();
+        previewFoto.style.display = 'none';
+        nombreArchivo.textContent = 'Ningún archivo seleccionado';
+        otraWrap.style.display = 'none';
+        mensajeExito.style.display = 'block';
+      } else {
+        mensajeError.textContent = 'Ocurrió un error: ' + (resultado.error || 'intenta nuevamente.');
+        mensajeError.style.display = 'block';
+      }
+
+    } catch (err) {
+      mensajeError.textContent = 'No se pudo enviar el formulario. Verifica tu conexión e intenta de nuevo.';
+      mensajeError.style.display = 'block';
+    } finally {
+      btnEnviar.disabled = false;
+      btnEnviar.textContent = 'Enviar ficha docente';
+    }
+  });
+</script>
+
+</body>
+</html>
